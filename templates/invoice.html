@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Invoice #{{ sale.id }}{% endblock %}
+{% block content %}
+<div class="card shadow-sm col-md-8 mx-auto"><div class="card-body">
+  <div class="d-flex justify-content-between">
+    <h4>Invoice #{{ sale.id }}</h4><span>{{ sale.created_at }}</span></div>
+  <p class="text-muted mb-3">Customer: {{ sale.customer }} &middot; Cashier: {{ sale.username }}</p>
+  <table class="table">
+    <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th class="text-end">Amount</th></tr></thead>
+    <tbody>
+    {% for i in items %}
+      <tr><td>{{ i.name }}</td><td>{{ i.qty }}</td><td>₹{{ '%.2f'|format(i.price) }}</td>
+        <td class="text-end">₹{{ '%.2f'|format(i.price * i.qty) }}</td></tr>
+    {% endfor %}
+    </tbody>
+    <tfoot><tr><th colspan="3" class="text-end">Total</th><th class="text-end">₹{{ '%.2f'|format(sale.total) }}</th></tr></tfoot>
+  </table>
+  <div class="no-print">
+    <button class="btn btn-primary" onclick="window.print()">Print</button>
+    <a class="btn btn-link" href="{{ url_for('billing') }}">New bill</a>
+  </div>
+</div></div>
+{% endblock %}

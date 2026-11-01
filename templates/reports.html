@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h3 class="mb-3">Sales Reports</h3>
+<div class="card mb-4"><div class="card-body">
+  <h6>Daily sales (last 30 days)</h6><canvas id="dailyChart" height="90"></canvas></div></div>
+<div class="row g-3">
+  <div class="col-md-6"><div class="card h-100"><div class="card-header">Monthly sales</div>
+    <table class="table mb-0"><thead><tr><th>Month</th><th>Bills</th><th>Revenue</th></tr></thead><tbody>
+    {% for m in monthly %}<tr><td>{{ m.m }}</td><td>{{ m.c }}</td><td>₹{{ '%.2f'|format(m.t) }}</td></tr>
+    {% else %}<tr><td colspan="3" class="text-muted text-center">No data</td></tr>{% endfor %}
+    </tbody></table></div></div>
+  <div class="col-md-6"><div class="card h-100"><div class="card-header">Top selling products</div>
+    <table class="table mb-0"><thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead><tbody>
+    {% for t in top %}<tr><td>{{ t.name }}</td><td>{{ t.q }}</td><td>₹{{ '%.2f'|format(t.r) }}</td></tr>
+    {% else %}<tr><td colspan="3" class="text-muted text-center">No data</td></tr>{% endfor %}
+    </tbody></table></div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+const daily = {{ daily|tojson }};
+new Chart(document.getElementById('dailyChart'), {
+  type: 'bar',
+  data: { labels: daily.map(d => d.d),
+          datasets: [{ label: 'Revenue (₹)', data: daily.map(d => d.t), backgroundColor: '#0d6efd' }] },
+  options: { scales: { y: { beginAtZero: true } } }
+});
+</script>
+{% endblock %}

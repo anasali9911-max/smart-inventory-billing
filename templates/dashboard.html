@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h3 class="mb-4">Dashboard</h3>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="card text-bg-primary"><div class="card-body">
+    <div>Today's Sales</div><h3>₹{{ '%.2f'|format(today_total) }}</h3></div></div></div>
+  <div class="col-md-4"><div class="card text-bg-success"><div class="card-body">
+    <div>Bills Today</div><h3>{{ today_count }}</h3></div></div></div>
+  <div class="col-md-4"><div class="card text-bg-secondary"><div class="card-body">
+    <div>Total Products</div><h3>{{ total_products }}</h3></div></div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card border-danger h-100"><div class="card-header bg-danger text-white">Expired ({{ expired|length }})</div>
+      <ul class="list-group list-group-flush">
+        {% for p in expired %}<li class="list-group-item d-flex justify-content-between">{{ p.name }}<span class="text-danger">{{ p.expiry_date }}</span></li>
+        {% else %}<li class="list-group-item text-muted">None 🎉</li>{% endfor %}
+      </ul></div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card border-warning h-100"><div class="card-header bg-warning">Expiring in {{ days }} days ({{ near|length }})</div>
+      <ul class="list-group list-group-flush">
+        {% for p in near %}<li class="list-group-item d-flex justify-content-between">{{ p.name }}<span>{{ p.expiry_date }}</span></li>
+        {% else %}<li class="list-group-item text-muted">None</li>{% endfor %}
+      </ul></div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card border-info h-100"><div class="card-header bg-info">Low Stock ({{ low|length }})</div>
+      <ul class="list-group list-group-flush">
+        {% for p in low %}<li class="list-group-item d-flex justify-content-between">{{ p.name }}<span class="badge bg-dark">{{ p.quantity }} left</span></li>
+        {% else %}<li class="list-group-item text-muted">All stocked</li>{% endfor %}
+      </ul></div>
+  </div>
+</div>
+{% endblock %}
