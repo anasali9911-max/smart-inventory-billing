@@ -212,8 +212,7 @@ def product_edit(pid):
         db.commit()
         flash("Product updated.", "success")
         return redirect(url_for("products"))
-    return render_template("product_form.html", product=product, mode="Edit")
-
+    return render_template("product_form.html", product=dict(product), mode="Edit")
 
 @app.route("/products/<int:pid>/delete", methods=["POST"])
 @admin_required
